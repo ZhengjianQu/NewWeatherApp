@@ -43,7 +43,7 @@ class WeatherData {
       humidity: json['main']['humidity'],
       description: json['weather'][0]['description'],
       iconUrl:
-      'http://openweathermap.org/img/w/${json['weather'][0]['icon']}.png',
+          'http://openweathermap.org/img/w/${json['weather'][0]['icon']}.png',
       name: json['name'],
       lon: json['coord']['lon'],
       lat: json['coord']['lat'],
@@ -146,65 +146,64 @@ class WeatherAppState extends State<WeatherApp> {
                 fit: BoxFit.cover,
               ),
             ),
-          child: Center(
-              child: _weatherData != null
-                  ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${_weatherData!.name}',
-                    style: TextStyle(
-                        fontSize: 36, fontWeight: FontWeight.bold),
-                  ),
-                  Image.network(_weatherData!.iconUrl),
-                  SizedBox(height: 16),
-                  Text(
-                    '${_weatherData!.temperature}°C',
-                    style: TextStyle(
-                        fontSize: 48, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    '${_weatherData!.description}',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Feels like ${_weatherData!.feelsLike}°C',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    'Min: ${_weatherData!.minTemperature}°C / Max: ${_weatherData!.maxTemperature}°C',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Text(
-                    'Pressure: ${_weatherData!.pressure} hPa / Humidity: ${_weatherData!.humidity}%',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Container(
-                    height: 50,
-                    alignment: Alignment.bottomCenter,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                        MaterialStateProperty.all(Color(0xFF000000)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
+            child: Center(
+                child: _weatherData != null
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${_weatherData!.name}',
+                            style: TextStyle(
+                                fontSize: 36, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ),
-                      onPressed: () => context.go('/forecast'),
-                      child: const Text('Forecast'),
-                    ),
-                  ),
-                ],
-              )
-              : Text(
-                _errorMessage,
-                style: TextStyle(fontSize: 24),
-              )
-            ),
+                          Image.network(_weatherData!.iconUrl),
+                          SizedBox(height: 16),
+                          Text(
+                            '${_weatherData!.temperature}°C',
+                            style: TextStyle(
+                                fontSize: 48, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            '${_weatherData!.description}',
+                            style: TextStyle(fontSize: 24),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Feels like ${_weatherData!.feelsLike}°C',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            'Min: ${_weatherData!.minTemperature}°C / Max: ${_weatherData!.maxTemperature}°C',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Text(
+                            'Pressure: ${_weatherData!.pressure} hPa / Humidity: ${_weatherData!.humidity}%',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Container(
+                            height: 50,
+                            alignment: Alignment.bottomCenter,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all(
+                                    Color(0xFF000000)),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16.0),
+                                  ),
+                                ),
+                              ),
+                              onPressed: () => context.go('/forecast'),
+                              child: const Text('Forecast'),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        _errorMessage,
+                        style: TextStyle(fontSize: 24),
+                      )),
           ),
         ),
       ),
