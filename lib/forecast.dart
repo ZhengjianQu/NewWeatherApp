@@ -140,7 +140,6 @@ class ForecastState extends State<Forecast> {
                   itemCount: forecastList.length,
                   itemBuilder: (context, index) {
                     final weatherInfo = forecastList[index];
-
                     return Container(
                       width: 200, // Adjust the width according to your needs
                       margin: const EdgeInsets.all(8.0),
