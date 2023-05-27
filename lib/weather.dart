@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 String apikey = '8dab3e149329990d1d9456befa085601';
 
@@ -17,9 +18,9 @@ class WeatherData {
   final int maxTemperature;
   final int pressure;
   final int humidity;
-  //final double windSpeed;
-  //final int windDeg;
-  //final int visibility;
+  final double windSpeed;
+  final int windDeg;
+  final int visibility;
   final String description;
   final String iconUrl;
   final String name;
@@ -33,9 +34,9 @@ class WeatherData {
     required this.maxTemperature,
     required this.pressure,
     required this.humidity,
-    //required this.windSpeed,
-    //required this.windDeg,
-    //required this.visibility,
+    required this.windSpeed,
+    required this.windDeg,
+    required this.visibility,
     required this.description,
     required this.iconUrl,
     required this.name,
@@ -51,9 +52,9 @@ class WeatherData {
       maxTemperature: json['main']['temp_max'].round(),
       pressure: json['main']['pressure'].round(),
       humidity: json['main']['humidity'].round(),
-      //windSpeed: json['wind']['speed'],
-      //windDeg: json['wind']['deg'],
-      //visibility: json['visibility'],
+      windSpeed: json['wind']['speed'],
+      windDeg: json['wind']['deg'],
+      visibility: json['visibility'],
       description: json['weather'][0]['description'],
       iconUrl:
           'http://openweathermap.org/img/w/${json['weather'][0]['icon']}.png',
@@ -363,7 +364,14 @@ class WeatherAppState extends State<WeatherApp> {
                                                   color: Color.fromRGBO(
                                                       0xFF, 0xFF, 0xFF, 0.6)),
                                             ),
-                                            //Text(_weatherData!.visibility as String),
+                                            Text(
+                                                '${_weatherData!.visibility} m',
+                                                style: const TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromRGBO(
+                                                    0xFF, 0xFF, 0xFF, 1)),
+                                            ),
                                             const Text(
                                               'Max 10km.',
                                               style: TextStyle(
@@ -390,7 +398,7 @@ class WeatherAppState extends State<WeatherApp> {
                                         padding: const EdgeInsets.all(20),
                                         child: Column(
                                           crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                           children: [
                                             const Text(
                                               'Wind',
@@ -400,10 +408,45 @@ class WeatherAppState extends State<WeatherApp> {
                                                   color: Color.fromRGBO(
                                                       0xFF, 0xFF, 0xFF, 0.6)),
                                             ),
-                                            //Text('${_weatherData!.windSpeed} m/s'),
-                                            //Text('${_weatherData!.windDeg}'),
-                                          ],
-                                        ),
+                                            Stack(
+                                              children: [
+                                                DottedBorder(
+                                                  borderType: BorderType.Circle,
+                                                  strokeWidth: 6,
+                                                  color: const Color.fromRGBO(255, 255, 255, 0.2),
+                                                  child: Container(
+                                                    width: 36,
+                                                    height: 36,
+                                                    margin: const EdgeInsets.all(20),
+                                                  ),
+                                                ),
+                                                Positioned.fill(
+                                                  child: Center(
+                                                    child: Column(
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                          (_weatherData!.windSpeed * 3.6).toStringAsFixed(2),
+                                                          style: const TextStyle(
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.bold,
+                                                              color: Color.fromRGBO(
+                                                                  0xFF, 0xFF, 0xFF, 1)),),
+                                                        const Text(
+                                                            'km/h',
+                                                          style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Color.fromRGBO(
+                                                                0xFF, 0xFF, 0xFF, 1)),),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ]
+                                        )
                                       ),
                                     ),
                                   ),
