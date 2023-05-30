@@ -75,36 +75,29 @@ class WeatherApp extends StatefulWidget {
 class WeatherAppState extends State<WeatherApp> {
   WeatherData? _weatherData;
   String _errorMessage = '';
-  String backgroundImage =
-      'assets/images/sunny.png'; // Background image path or color code
+  String backgroundImage =''; // Background image path or color code
 
   void updateBackgroundBasedOnWeatherData(String weatherCondition) {
-    switch (weatherCondition.toLowerCase()) {
-      case 'clear sky':
-        backgroundImage = 'assets/images/sunny.png';
-        break;
-      case 'clouds':
-        backgroundImage = 'assets/images/cloudy.png';
-        break;
-      case 'rain and snow':
-        backgroundImage = 'assets/images/rainy.png';
-        //TODO:rain and snow.jpg';
-        break;
-      case 'rain':
-      case 'shower sleet':
-        backgroundImage = 'assets/images/rainy.png';
-        break;
-      case 'snow':
-        backgroundImage = 'assets/images/snow.png';
-        break;
-      case 'thunderstorm':
-        backgroundImage = 'assets/images/thunderstorm.png';
-        break;
-      default:
-        backgroundImage = 'assets/images/sunny.png';
+    if (weatherCondition.toLowerCase().contains('clear sky')) {
+      backgroundImage = 'assets/images/sunny.png';
+    } else if (weatherCondition.toLowerCase().contains('clouds')) {
+      backgroundImage = 'assets/images/cloudy.png';
+    } else if (weatherCondition.toLowerCase().contains('rain and snow')) {
+      backgroundImage = 'assets/images/rainy.png';
+      //TODO:rain and snow.jpg';
+    } else if (weatherCondition.toLowerCase().contains('rain') ||
+        weatherCondition.toLowerCase().contains('shower sleet')) {
+      backgroundImage = 'assets/images/rainy.png';
+    } else if (weatherCondition.toLowerCase().contains('snow')) {
+      backgroundImage = 'assets/images/snow.png';
+    } else if (weatherCondition.toLowerCase().contains('thunderstorm')) {
+      backgroundImage = 'assets/images/thunderstorm.png';
+    } else {
+      backgroundImage = 'assets/images/sunny.png';
       //TODO
     }
   }
+
 
   Future<void> _fetchWeatherData(double latitude, double longitude) async {
     final url = Uri.parse(
@@ -168,6 +161,12 @@ class WeatherAppState extends State<WeatherApp> {
                 ),
                 style: const TextStyle(color: Colors.white),
               ),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white), // 菜单图标按钮
+              onPressed: () {
+                //TODO: link function
+              },
             ),
             actions: [
               IconButton(
