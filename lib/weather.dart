@@ -7,9 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 
 String apikey = '8dab3e149329990d1d9456befa085601';
 
-Color color00 = const Color.fromRGBO(0x0, 0x0, 0x0, 0.8);
-Color color01 = const Color.fromRGBO(0x48, 0x31, 0x9D, 0.2);
-Color color02 = const Color.fromRGBO(0xFF, 0xFF, 0xFF, 0.6);
+String backgroundImage ='';
 
 class WeatherData {
   final int temperature;
@@ -75,7 +73,6 @@ class WeatherApp extends StatefulWidget {
 class WeatherAppState extends State<WeatherApp> {
   WeatherData? _weatherData;
   String _errorMessage = '';
-  String backgroundImage =''; // Background image path or color code
 
   void updateBackgroundBasedOnWeatherData(String weatherCondition) {
     if (weatherCondition.toLowerCase().contains('clear sky')) {
@@ -164,9 +161,7 @@ class WeatherAppState extends State<WeatherApp> {
             ),
             leading: IconButton(
               icon: const Icon(Icons.menu, color: Colors.white), // 菜单图标按钮
-              onPressed: () {
-                //TODO: link function
-              },
+              onPressed: () => context.go('/menu'),
             ),
             actions: [
               IconButton(
