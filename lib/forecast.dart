@@ -5,19 +5,23 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart' hide TextDirection;
 import 'dart:convert';
 
+import 'package:weather_iffic/weather.dart' hide WeatherData;
+
 String apikey = '8dab3e149329990d1d9456befa085601';
 
 class WeatherData {
   final String temperature;
   final String weather;
   final String time;
-  final String iconUrl;
+  final String week;
   final String date;
+  final String iconUrl;
 
   WeatherData({
     required this.temperature,
     required this.weather,
     required this.date,
+    required this.week,
     required this.time,
     required this.iconUrl,
   });
@@ -29,13 +33,15 @@ class WeatherData {
     final temperature = main['temp'].round().toString();
     final weatherDescription = weather['description'].toString();
     final timestamp = DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000);
-    final date = DateFormat('MM/dd').format(timestamp); // Format the timestamp
+    final date = DateFormat('MM/dd').format(timestamp);
+    final week = DateFormat('EEEE').format(timestamp);// Format the timestamp
     final time = DateFormat('HH:mm').format(timestamp);
 
     return WeatherData(
       temperature: temperature,
       weather: weatherDescription,
       date: date,
+      week: week,
       time: time,
       iconUrl:
           'http://openweathermap.org/img/w/${json['weather'][0]['icon']}.png',
@@ -116,72 +122,102 @@ class ForecastState extends State<Forecast> {
               onPressed: () => context.go('/'),
             ),
           ),
-          body: FutureBuilder<ForecastData>(
-            future: forecastData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else if (!snapshot.hasData) {
-                return const Center(
-                  child: Text('No data available'),
-                );
-              } else {
-                final forecastData = snapshot.data!;
-                final forecastList = forecastData.forecastList;
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(backgroundImage),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 30, vertical: 30
+                ), // 设置左右和上下的间距
+                decoration: BoxDecoration(
+                  borderRadius:
+                  BorderRadius.circular(20), // 设置圆角半径为10
+                  color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8)
+                ),
+                child: FutureBuilder<ForecastData>(
+                  future: forecastData,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    } else if (!snapshot.hasData) {
+                      return const Center(
+                        child: Text('No data available'),
+                      );
+                    } else {
+                      final forecastData = snapshot.data!;
+                      final forecastList = forecastData.forecastList;
 
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: forecastList.length,
-                  itemBuilder: (context, index) {
-                    final weatherInfo = forecastList[index];
-                    return Container(
-                      width: 200, // Adjust the width according to your needs
-                      margin: const EdgeInsets.all(8.0),
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            weatherInfo.date,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            weatherInfo.time,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 48),
-                          Text(
-                            '${weatherInfo.temperature}°C',
-                            style: const TextStyle(
-                                fontSize: 48, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 16),
-                          Image.network(weatherInfo.iconUrl),
-                          const SizedBox(height: 16),
-                          Text(
-                            weatherInfo.weather,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    );
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: forecastList.length,
+                        itemBuilder: (context, index) {
+                          final weatherInfo = forecastList[index];
+                          return Container(
+                            margin: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius:BorderRadius.circular(50),
+                              color: const Color.fromRGBO(
+                                  0x48, 0x31, 0x9D, 0.2),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        weatherInfo.time,
+                                        style: const TextStyle(
+                                            fontSize: 24, fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                      Text(
+                                        '${weatherInfo.temperature}°C',
+                                        style: const TextStyle(
+                                            fontSize: 48, fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                      Text(
+                                        weatherInfo.weather,
+                                        style: const TextStyle(
+                                            fontSize: 24, fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Image.network(
+                                    weatherInfo.iconUrl,
+                                    width: 90,
+                                    height: 90,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    }
                   },
-                );
-              }
-            },
+                ),
+              ),
+            ),
           ),
         ),
       ),

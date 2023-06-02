@@ -7,7 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 
 String apikey = '8dab3e149329990d1d9456befa085601';
 
-String backgroundImage ='';
+String backgroundImage ='assets/images/cloudy.png';
 
 class WeatherData {
   final int temperature;
@@ -247,7 +247,8 @@ class WeatherAppState extends State<WeatherApp> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: const Color.fromRGBO(
-                                              0x48, 0x31, 0x9D, 0.2),
+                                              0x48, 0x31, 0x9D, 0.2
+                                          ),
                                           borderRadius:
                                               BorderRadius.circular(10),
                                         ),
@@ -262,7 +263,9 @@ class WeatherAppState extends State<WeatherApp> {
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.bold,
                                                   color: Color.fromRGBO(
-                                                      0xFF, 0xFF, 0xFF, 0.6)),
+                                                      0xFF, 0xFF, 0xFF, 0.6
+                                                  )
+                                              ),
                                             ),
                                             Text(
                                               _weatherData!.feelsLike
@@ -270,7 +273,8 @@ class WeatherAppState extends State<WeatherApp> {
                                               style: const TextStyle(
                                                   fontSize: 28,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.white),
+                                                  color: Colors.white
+                                              ),
                                             ),
                                             const Text(
                                               'Similar to the actual temperature.',
@@ -331,7 +335,8 @@ class WeatherAppState extends State<WeatherApp> {
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.all(20),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
