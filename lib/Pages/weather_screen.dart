@@ -4,34 +4,36 @@ import 'package:dotted_border/dotted_border.dart'; // 风向的虚线圈
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
-// Layout
-//import 'weather.dart';
-//import 'forecast.dart';
-// DataStructure
-import 'DataStructure/forecast_model.dart';
-import 'DataStructure/weather_model.dart';
-
-// Global variables
-import 'global_variables.dart';
+import 'package:toggle_switch/toggle_switch.dart';
+// File
+import '../DataStructure/forecast_model.dart';
+import '../DataStructure/weather_model.dart';
+import '../global_variables.dart';
+import '../SearchBar/navigation_drawer_widget.dart';
 
 
 
-class CombinedPage extends StatefulWidget {
-  const CombinedPage({super.key});
+
+class WeatherPage extends StatefulWidget {
+  const WeatherPage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _CombinedPageState createState() => _CombinedPageState();
+  _WeatherPageState createState() => _WeatherPageState();
 }
 
-class _CombinedPageState extends State<CombinedPage> {
+class _WeatherPageState extends State<WeatherPage> {
   int _currentPageIndex = 0;
+  int selectedUnitIndex = 0;
 
   WeatherData? _weatherData;
-  ForecastData? _forecastData;
+  late Future<ForecastData> forecastData;
 
   String _errorMessage = '';
   final PageController _pageController = PageController(initialPage: 0);
+
+  final TextEditingController _searchController = TextEditingController();
+  bool _showClearButton = false;
 
   void updateWeather(String description) {
     List<String> atmosphere =  ["Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Ash", "Squall", "Tornado"];
@@ -50,7 +52,6 @@ class _CombinedPageState extends State<CombinedPage> {
         desiredAccuracy: LocationAccuracy.high,
       );
       await _fetchWeatherData(position.latitude, position.longitude);
-      await fetchForecastListData(position.latitude, position.longitude);
     } catch (e) {
       setState(() {
         _errorMessage = 'Failed to get current location';
@@ -62,32 +63,49 @@ class _CombinedPageState extends State<CombinedPage> {
     final url = Uri.parse(
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
     final response = await http.get(url);
+
     if (response.statusCode == 200) {
       setState(() {
-        _weatherData = WeatherData.fromJson(jsonDecode(response.body));
+        _weatherData = WeatherData.fromJson(json.decode(response.body));
+        _errorMessage = '';
       });
     } else {
-      throw Exception('Failed to fetch weather data');
+      setState(() {
+        _errorMessage = 'Failed to load data from OpenWeatherMap API';
+      });
     }
   }
 
-  Future<void> fetchForecastListData(double latitude, double longitude) async {
+  Future<ForecastData> fetchForecastData(double latitude, double longitude) async {
     final url = Uri.parse(
         'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      setState(() {
-        _forecastData =  ForecastData.fromJson(jsonDecode(response.body));
-      });
+      // 解析 API 响应的 JSON 数据并创建 ForecastData 对象
+      return ForecastData.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to fetch forecast data');
     }
+  }
+
+  void _onTextChanged(String value) {
+    setState(() {
+      _showClearButton = value.isNotEmpty;
+    });
+  }
+
+  void _onClear() {
+    setState(() {
+      _searchController.clear();
+      _showClearButton = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    forecastData = fetchForecastData(latitude, longitude);
   }
 
   @override
@@ -98,8 +116,98 @@ class _CombinedPageState extends State<CombinedPage> {
 
   @override
   Widget build(BuildContext context) {
-    updateWeather(_weatherData!.main);
+    if(_weatherData!=null){
+      updateWeather(_weatherData!.main);
+    }
     return Scaffold(
+      //extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      backgroundColor: const Color(0xFFf9f9f9),
+      //this is the sidebar menu
+      appBar: AppBar(
+          backgroundColor: const Color(0xE6000000),
+          elevation: 0.0,
+          title: Stack(
+            children: [
+              TextField(
+                controller: _searchController,
+                onChanged: _onTextChanged,
+                style : const TextStyle(color: Colors.grey),
+                decoration: InputDecoration(
+                  prefixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        location = "current";
+                        _onClear();
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.location_on_outlined,
+                      color: Colors.deepPurple,
+                    ),
+                  ),
+                  fillColor: const Color(0xE2ffffff),
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                    borderSide: BorderSide.none,
+                  ),
+                  hintText: 'Search City...',
+                  hintStyle: const TextStyle(color: Colors.grey),
+                  suffixIcon: _showClearButton ? null : const Icon(Icons.search),
+                  suffixIconColor: Colors.grey,
+                ),
+                onSubmitted: (String value){
+                  setState(() {
+                    location = _searchController.text;
+                    _onClear();
+                  });
+                },
+              ),
+              Visibility(
+                visible: _showClearButton,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                          onPressed: _onClear,
+                          icon: const Icon(Icons.clear)
+                      )
+                    ]
+                ),
+              ),
+            ],
+          ),
+          centerTitle: true,
+          //leading: IconButton(
+          //  onPressed: () {},
+          //  icon: const Icon(Icons.menu),
+          //  color: Colors.deepPurple,
+          //),
+          actions: <Widget>[
+            ToggleSwitch(
+              initialLabelIndex: selectedUnitIndex,
+              totalSwitches: 2,
+              labels: const ['°C', '°F'],
+              onToggle: (index) {
+                setState(() {
+                  selectedUnitIndex = index!;
+                  if (index == 0) {
+                    units = "metric";
+                    unitSymbol = "°C";
+                  }
+                  else {
+                    units = "imperial";
+                    unitSymbol = "°F";
+                  }
+                });
+                //getData();
+                updateWeather(_weatherData!.main);
+              },
+            )
+          ]
+      ),
+      drawer: const NavigationDrawerWidget(),
+
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -107,9 +215,10 @@ class _CombinedPageState extends State<CombinedPage> {
             _currentPageIndex = index;
           });
         },
+
         children: [
           _buildWeatherPage(_weatherData),
-          _buildForecastPage(_forecastData),
+          _buildForecastPage(forecastData),
         ],
       ),
     );
@@ -117,6 +226,9 @@ class _CombinedPageState extends State<CombinedPage> {
 }
 
 Widget _buildWeatherPage(weatherData){
+  if (weatherData == null) {
+    return const CircularProgressIndicator(); // 或者其他处理空值的 Widget
+  }
   return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -395,6 +507,9 @@ Widget _buildWeatherPage(weatherData){
 }
 
 Widget _buildForecastPage(forecastData){
+  if (forecastData == null) {
+    return const CircularProgressIndicator(); // 或者其他处理空值的 Widget
+  }
   return Container(
     decoration: BoxDecoration(
       image: DecorationImage(
@@ -415,63 +530,69 @@ Widget _buildForecastPage(forecastData){
         child: FutureBuilder<ForecastData>(
           future: forecastData,
           builder: (context, snapshot) {
-            final forecastData = snapshot.data!;
-            final forecastList = forecastData.forecastList;
-            return ListView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: forecastList.length,
-              itemBuilder: (context, index) {
-                final weatherInfo = forecastList[index];
-                return Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius:BorderRadius.circular(50),
-                    color: const Color.fromRGBO(
-                        0x48, 0x31, 0x9D, 0.2),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              weatherInfo.time,
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Text(
-                              '${weatherInfo.temperature}°C',
-                              style: const TextStyle(
-                                  fontSize: 48, fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Text(
-                              weatherInfo.main,
-                              style: const TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ],
+            if (snapshot.hasData) {
+              final forecastData = snapshot.data!;
+              final forecastList = forecastData.forecastList;
+              return ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: forecastList.length,
+                itemBuilder: (context, index) {
+                  final weatherInfo = forecastList[index];
+                  return Container(
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius:BorderRadius.circular(50),
+                      color: const Color.fromRGBO(
+                          0x48, 0x31, 0x9D, 0.2),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                weatherInfo.time,
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                '${weatherInfo.temperature}°C',
+                                style: const TextStyle(
+                                    fontSize: 48, fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              Text(
+                                weatherInfo.weather,
+                                style: const TextStyle(
+                                    fontSize: 24, fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Image.network(
-                          weatherInfo.iconUrl,
-                          width: 90,
-                          height: 90,
+                        Expanded(
+                          flex: 3,
+                          child: Image.network(
+                            weatherInfo.iconUrl,
+                            width: 90,
+                            height: 90,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
+                      ],
+                    ),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return const Text('Failed to fetch forecast data');
+            } else {
+              return const CircularProgressIndicator();
+            }
           },
         ),
       ),

@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart' hide TextDirection;
-
 class WeatherData {
   final int temperature;
   final int feelsLike;
@@ -15,7 +13,6 @@ class WeatherData {
   final String name;
   final double lon;
   final double lat;
-  final String time;
 
   WeatherData({
     required this.temperature,
@@ -32,12 +29,9 @@ class WeatherData {
     required this.name,
     required this.lon,
     required this.lat,
-    required this.time,
   });
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
-    final timestamp = DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000);
-    final time = DateFormat('HH:mm').format(timestamp);
     return WeatherData(
       temperature: json['main']['temp'].round(),
       feelsLike: json['main']['feels_like'].round(),
@@ -54,7 +48,6 @@ class WeatherData {
       name: json['name'],
       lon: json['coord']['lon'],
       lat: json['coord']['lat'],
-      time: time
     );
   }
 }
