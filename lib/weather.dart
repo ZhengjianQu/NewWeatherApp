@@ -1,196 +1,41 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
-import 'package:go_router/go_router.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'DataStructure/weather_model.dart';
+import 'global_variables.dart';
 
-String apikey = '8dab3e149329990d1d9456befa085601';
+class Weather extends StatefulWidget {
+  final WeatherData weatherData;
 
-String backgroundImage ='assets/images/cloudy.png';
-
-class WeatherData {
-  final int temperature;
-  final int feelsLike;
-  final int minTemperature;
-  final int maxTemperature;
-  final int pressure;
-  final int humidity;
-  final double windSpeed;
-  final int windDeg;
-  final int visibility;
-  final String description;
-  final String iconUrl;
-  final String name;
-  final double lon;
-  final double lat;
-
-  WeatherData({
-    required this.temperature,
-    required this.feelsLike,
-    required this.minTemperature,
-    required this.maxTemperature,
-    required this.pressure,
-    required this.humidity,
-    required this.windSpeed,
-    required this.windDeg,
-    required this.visibility,
-    required this.description,
-    required this.iconUrl,
-    required this.name,
-    required this.lon,
-    required this.lat,
-  });
-
-  factory WeatherData.fromJson(Map<String, dynamic> json) {
-    return WeatherData(
-      temperature: json['main']['temp'].round(),
-      feelsLike: json['main']['feels_like'].round(),
-      minTemperature: json['main']['temp_min'].round(),
-      maxTemperature: json['main']['temp_max'].round(),
-      pressure: json['main']['pressure'].round(),
-      humidity: json['main']['humidity'].round(),
-      windSpeed: json['wind']['speed'],
-      windDeg: json['wind']['deg'],
-      visibility: json['visibility'],
-      description: json['weather'][0]['description'],
-      iconUrl:
-          'http://openweathermap.org/img/w/${json['weather'][0]['icon']}.png',
-      name: json['name'],
-      lon: json['coord']['lon'],
-      lat: json['coord']['lat'],
-    );
-  }
-}
-
-class WeatherApp extends StatefulWidget {
-  const WeatherApp({super.key});
+  const Weather({Key? key, required this.weatherData}) : super(key: key);
 
   @override
-  WeatherAppState createState() => WeatherAppState();
+  WeatherState createState() => WeatherState();
 }
 
-class WeatherAppState extends State<WeatherApp> {
-  WeatherData? _weatherData;
-  String _errorMessage = '';
+class WeatherState extends State<Weather> {
 
-  void updateBackgroundBasedOnWeatherData(String weatherCondition) {
-    if (weatherCondition.toLowerCase().contains('clear sky')) {
-      backgroundImage = 'assets/images/sunny.png';
-    } else if (weatherCondition.toLowerCase().contains('clouds')) {
-      backgroundImage = 'assets/images/cloudy.png';
-    } else if (weatherCondition.toLowerCase().contains('rain and snow')) {
-      backgroundImage = 'assets/images/rainy.png';
-      //TODO:rain and snow.jpg';
-    } else if (weatherCondition.toLowerCase().contains('rain') ||
-        weatherCondition.toLowerCase().contains('shower sleet')) {
-      backgroundImage = 'assets/images/rainy.png';
-    } else if (weatherCondition.toLowerCase().contains('snow')) {
-      backgroundImage = 'assets/images/snow.png';
-    } else if (weatherCondition.toLowerCase().contains('thunderstorm')) {
-      backgroundImage = 'assets/images/thunderstorm.png';
-    } else {
-      backgroundImage = 'assets/images/sunny.png';
-      //TODO
-    }
-  }
-
-
-  Future<void> _fetchWeatherData(double latitude, double longitude) async {
-    final url = Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&appid=$apikey&units=metric');
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      setState(() {
-        _weatherData = WeatherData.fromJson(json.decode(response.body));
-        _errorMessage = '';
-      });
-    } else {
-      setState(() {
-        _errorMessage = 'Failed to load data from OpenWeatherMap API';
-      });
-    }
-  }
-
-  Future<void> _getCurrentLocation() async {
-    try {
-      final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      await _fetchWeatherData(position.latitude, position.longitude);
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Failed to get current location';
-      });
-    }
-  }
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_weatherData != null) {
-      updateBackgroundBasedOnWeatherData(_weatherData!.description);
-    }
     return MaterialApp(
       title: 'Weather App',
       home: Directionality(
         textDirection: TextDirection.ltr,
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: SizedBox(
-              height: kToolbarHeight - 10,
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: 'Enter the city name',
-                  hintStyle: const TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-            leading: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.white), // 菜单图标按钮
-              onPressed: () => context.go('/menu'),
-            ),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.refresh),
-                onPressed: () async {
-                  try {
-                    final position = await Geolocator.getCurrentPosition(
-                      desiredAccuracy: LocationAccuracy.high,
-                    );
-                    _fetchWeatherData(position.latitude, position.longitude);
-                  } catch (e) {
-                    setState(() {
-                      _errorMessage = 'Failed to get current location';
-                    });
-                  }
-                },
-              )
-            ],
-          ),
           body: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(backgroundImage),
+                image: AssetImage(getBackgroundPath()),
                 fit: BoxFit.cover,
               ),
             ),
             child: Center(
-                child: _weatherData != null
-                    ? Container(
+                child: Container(
                         margin: const EdgeInsets.symmetric(
                             horizontal: 30, vertical: 30), // 设置左右和上下的间距
                         decoration: BoxDecoration(
@@ -227,7 +72,7 @@ class WeatherAppState extends State<WeatherApp> {
                                   ),
                                   const SizedBox(width: 16),
                                   Text(
-                                    _weatherData!.description,
+                                    _weatherData!.main,
                                     style: const TextStyle(
                                         fontSize: 28, color: Colors.white),
                                   ),

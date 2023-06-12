@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_iffic/weather.dart';
+import 'package:weather_iffic/global_variables.dart';
 
 class Menu extends StatelessWidget {
   const Menu({super.key});
@@ -18,7 +18,7 @@ class Menu extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(backgroundImage),
+            image: AssetImage(getBackgroundPath()),
             fit: BoxFit.cover,
           ),
         ),
