@@ -131,10 +131,13 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-    _fetchWeatherData();
-    forecastData = fetchForecastData();
-    modifiable = false;
+    _getCurrentLocation().then((_) {
+      setState(() {
+        modifiable = false;
+      });
+      _fetchWeatherData();
+      forecastData = fetchForecastData();
+    });
   }
 
   @override
@@ -163,12 +166,15 @@ class _WeatherPageState extends State<WeatherPage> {
                 decoration: InputDecoration(
                   prefixIcon: IconButton(
                     onPressed: () {
-                      setState(() async {
+                      setState(() {
                         modifiable = true;
-                        await _getCurrentLocation();
-                        modifiable = false;
-                        _fetchWeatherData();
-                        forecastData = fetchForecastData();
+                        _getCurrentLocation().then((_) {
+                          setState(() {
+                            modifiable = false;
+                            _fetchWeatherData();
+                            forecastData = fetchForecastData();
+                          });
+                        });
                       });
                     },
                     icon: const Icon(
@@ -186,13 +192,16 @@ class _WeatherPageState extends State<WeatherPage> {
                   suffixIcon: _showClearButton ? null : const Icon(Icons.search),
                   suffixIconColor: Colors.grey,
                 ),
-                onSubmitted: (String value) async {
-                  setState(() async {
+                onSubmitted: (String value) {
+                  setState(() {
                     modifiable = true;
-                    await _getCityCoordinates(_searchController.text);
-                    modifiable = false;
-                    _fetchWeatherData();
-                    forecastData = fetchForecastData();
+                    _getCityCoordinates(_searchController.text).then((_) {
+                      setState(() {
+                        modifiable = false;
+                        _fetchWeatherData();
+                        forecastData = fetchForecastData();
+                      });
+                    });
                   });
                 },
               ),
@@ -280,7 +289,17 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            createText(weatherData!.name, 64),
+            LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: createText(weatherData!.name, 64),
+                  ),
+                );
+              },
+            ),
             const SizedBox(height: 8),
             createText('${temperature(weatherData!.temperature)}$unitSymbol', 64),
             const SizedBox(height: 8),

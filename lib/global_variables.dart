@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 String apiKey = '8dab3e149329990d1d9456befa085601';
-String weather = 'Clear';
+String weather = 'Clouds';
 bool isCelsius = true;
 String unitSymbol = "°C";
 
