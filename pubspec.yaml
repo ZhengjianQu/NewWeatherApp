@@ -30,7 +30,7 @@ environment:
 dependencies:
   http: ^0.13.3
   geolocator: ^7.6.2
-  geocoding: ^2.0.1
+  geocoding: ^2.1.0
   intl: ^0.17.0
   go_router: ^5.0.5
   dotted_border: ^2.0.0
@@ -60,11 +60,35 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/images/Background/Clear.png
-    - assets/images/Background/Clouds.png
-    - assets/images/Background/Rain.png
-    - assets/images/Background/Snow.png
-    - assets/images/Background/Thunderstorm.png
+    - assets/images/Backgrounds/Clear.png
+    - assets/images/Backgrounds/Clouds.png
+    - assets/images/Backgrounds/Rain.png
+    - assets/images/Backgrounds/Snow.png
+    - assets/images/Backgrounds/Thunderstorm.png
+
+    - assets/images/Icons/01d.png
+    - assets/images/Icons/01n.png
+    - assets/images/Icons/02d.png
+    - assets/images/Icons/02n.png
+    - assets/images/Icons/03d.png
+    - assets/images/Icons/03n.png
+    - assets/images/Icons/04d.png
+    - assets/images/Icons/04n.png
+    - assets/images/Icons/09d.png
+    - assets/images/Icons/09n.png
+    - assets/images/Icons/10d.png
+    - assets/images/Icons/10n.png
+    - assets/images/Icons/11d.png
+    - assets/images/Icons/11n.png
+    - assets/images/Icons/13d.png
+    - assets/images/Icons/13n.png
+    - assets/images/Icons/50d.png
+    - assets/images/Icons/50n.png
+
+    - assets/images/Photos/Name.jpg
+    - assets/images/Photos/Zhengjian Qu.jpg
+    - assets/images/Photos/Contact.jpg
+    - assets/images/Photos/Contact_Cut.jpg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

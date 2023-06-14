@@ -1,14 +1,14 @@
 import 'package:intl/intl.dart' hide TextDirection;
 
-class WeatherForcastData {
-  final String temperature;
+class WeatherForecastData {
+  final double temperature;
   final String weather;
   final String time;
   final String week;
   final String date;
   final String iconUrl;
 
-  WeatherForcastData({
+  WeatherForecastData({
     required this.temperature,
     required this.weather,
     required this.date,
@@ -17,40 +17,32 @@ class WeatherForcastData {
     required this.iconUrl,
   });
 
-  factory WeatherForcastData.fromJson(Map<String, dynamic> json) {
-    final main = json['main'];
-    final weather = json['weather'][0];
-
-    final temperature = main['temp'].round().toString();
-    final weatherDescription = weather['main'].toString();
+  factory WeatherForecastData.fromJson(Map<String, dynamic> json) {
     final timestamp = DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000);
     final date = DateFormat('MM/dd').format(timestamp);
     final week = DateFormat('EEEE').format(timestamp);// Format the timestamp
     final time = DateFormat('HH:mm').format(timestamp);
+    final iconUrl = json['weather'][0]['icon'];
 
-    return WeatherForcastData(
-      temperature: temperature,
-      weather: weatherDescription,
+    return WeatherForecastData(
+      temperature: json['main']['temp'],
+      weather: json['weather'][0]['main'],
       date: date,
       week: week,
       time: time,
-      iconUrl:
-      'http://openweathermap.org/img/w/${json['weather'][0]['icon']}.png',
+      iconUrl:iconUrl,
     );
   }
 }
 
 
 class ForecastData {
-  final List<WeatherForcastData> forecastList;
-
+  final List<WeatherForecastData> forecastList;
   ForecastData({required this.forecastList});
-
   factory ForecastData.fromJson(Map<String, dynamic> json) {
-    final forecastList = List<WeatherForcastData>.from(json['list'].map((data) {
-      return WeatherForcastData.fromJson(data);
+    final forecastList = List<WeatherForecastData>.from(json['list'].map((data) {
+      return WeatherForecastData.fromJson(data);
     }));
-
     return ForecastData(forecastList: forecastList);
   }
 }
