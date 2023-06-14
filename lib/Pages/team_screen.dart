@@ -61,10 +61,11 @@ class TeamPage extends StatelessWidget {
                                 itemCount: groupMembers.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   List<String> memberInfo = groupMembers[index];
-                                  String name = memberInfo[0];
-                                  String role = memberInfo[1];
-                                  String email = memberInfo[2];
-                                  return createBusinessCard(name, role, email);
+                                  return createBusinessCard(
+                                      memberInfo[0],//name
+                                      memberInfo[1],//role
+                                      memberInfo[2],//email
+                                  );
                                 },
                               ),
                             ),

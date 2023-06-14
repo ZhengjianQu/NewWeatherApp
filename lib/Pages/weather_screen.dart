@@ -27,7 +27,7 @@ class _WeatherPageState extends State<WeatherPage> {
   int selectedUnitIndex = 0;
 
   WeatherData? _weatherData;
-  late Future<ForecastData> forecastData;
+  Future<ForecastData>? _forecastData;
 
   String _errorMessage = '';
   final PageController _pageController = PageController(initialPage: 0);
@@ -136,7 +136,7 @@ class _WeatherPageState extends State<WeatherPage> {
         modifiable = false;
       });
       _fetchWeatherData();
-      forecastData = fetchForecastData();
+      _forecastData = fetchForecastData();
     });
   }
 
@@ -151,6 +151,9 @@ class _WeatherPageState extends State<WeatherPage> {
     if(_weatherData!=null){
       updateWeather(_weatherData!.main);
       previousWeatherData = _weatherData;
+    }
+    if(_forecastData!=null){
+      previousForecastData = _forecastData;
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -172,7 +175,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           setState(() {
                             modifiable = false;
                             _fetchWeatherData();
-                            forecastData = fetchForecastData();
+                            _forecastData = fetchForecastData();
                           });
                         });
                       });
@@ -199,7 +202,7 @@ class _WeatherPageState extends State<WeatherPage> {
                       setState(() {
                         modifiable = false;
                         _fetchWeatherData();
-                        forecastData = fetchForecastData();
+                        _forecastData = fetchForecastData();
                       });
                     });
                   });
@@ -260,7 +263,7 @@ class _WeatherPageState extends State<WeatherPage> {
           },
           children: [
             _buildWeatherPage(_weatherData),
-            _buildForecastPage(forecastData),
+            _buildForecastPage(_forecastData),
           ],
         ),
       ),
@@ -271,7 +274,7 @@ class _WeatherPageState extends State<WeatherPage> {
     if (weatherData == null && previousWeatherData != null) {
       return _buildDataPage(previousWeatherData); // 使用上一次的数据加载页面
     }else if(weatherData == null){
-      return const CircularProgressIndicator();
+      return _loadingPage();
     }else {
       return _buildDataPage(weatherData); // 使用当前的数据加载页面
     }
@@ -308,7 +311,7 @@ class _WeatherPageState extends State<WeatherPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.network(
-                    'https://openweathermap.org/img/wn/${weatherData!.iconUrl}@2x.png',
+                    'https://openweathermap.org/img/wn/${weatherData!.iconUrl}@4x.png',
                     width: 90,
                     height: 90,
                   ),
@@ -463,9 +466,16 @@ class _WeatherPageState extends State<WeatherPage> {
   }
 
   Widget _buildForecastPage(forecastData){
-    if (forecastData == null) {
-      return const CircularProgressIndicator(); // 或者其他处理空值的 Widget
+    if (forecastData == null && previousForecastData != null) {
+      return _buildListPage(previousForecastData); // 使用上一次的数据加载页面
+    }else if(forecastData == null){
+      return _loadingPage();
+    }else {
+      return _buildListPage(forecastData); // 使用当前的数据加载页面
     }
+  }
+
+  Widget _buildListPage(forecastData){
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(
@@ -526,10 +536,13 @@ class _WeatherPageState extends State<WeatherPage> {
                         ),
                         Expanded(
                           flex: 3,
-                          child: Image.network(
-                            'https://openweathermap.org/img/wn/${weatherInfo.iconUrl}@2x.png',
-                            width: 90,
-                            height: 90,
+                          child: Transform.scale(
+                            scale: 1.5, // 设置所需的缩放比例
+                            child: Image.network(
+                              'https://openweathermap.org/img/wn/${weatherInfo.iconUrl}@4x.png',
+                              width: 100,
+                              height: 100,
+                            ),
                           ),
                         ),
                       ],
@@ -545,6 +558,26 @@ class _WeatherPageState extends State<WeatherPage> {
           },
         ),
       ),
+    );
+  }
+
+  Widget _loadingPage(){
+    return Center(
+        child: Container(
+            margin: const EdgeInsets.symmetric(
+              horizontal: 30, vertical: 30), // 设置左右和上下的间距
+            decoration: BoxDecoration(
+              borderRadius:
+              BorderRadius.circular(10), // 设置圆角半径为10
+              color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            ),
+        ),
+
     );
   }
 }
