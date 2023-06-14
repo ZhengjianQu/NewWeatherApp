@@ -50,6 +50,7 @@ Widget createListTile(String text, IconData icon, String path, BuildContext cont
     ),
     leading: Icon(icon, color: Colors.white.withOpacity(0.5)),
     onTap: () {
+      modifiable = false;
       Navigator.of(context).pop();
       Navigator.pushNamed(context, path);
     },

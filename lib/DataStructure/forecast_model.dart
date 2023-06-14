@@ -25,7 +25,7 @@ class WeatherForecastData {
     final iconUrl = json['weather'][0]['icon'];
 
     return WeatherForecastData(
-      temperature: json['main']['temp'],
+      temperature: json['main']['temp'].toDouble(),
       weather: json['weather'][0]['main'],
       date: date,
       week: week,

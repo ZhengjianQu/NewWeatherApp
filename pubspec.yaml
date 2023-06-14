@@ -65,6 +65,7 @@ flutter:
     - assets/images/Backgrounds/Rain.png
     - assets/images/Backgrounds/Snow.png
     - assets/images/Backgrounds/Thunderstorm.png
+    - assets/images/Backgrounds/Atmosphere.png
 
     - assets/images/Icons/01d.png
     - assets/images/Icons/01n.png

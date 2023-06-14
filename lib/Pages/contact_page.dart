@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_iffic/Pages/weather_screen.dart';
 
 import '../global_variables.dart';
 
@@ -10,9 +11,9 @@ class ContactPage extends StatefulWidget {
 }
 
 class _ContactPageState extends State<ContactPage> {
-  TextEditingController _textField1Controller = TextEditingController();
-  TextEditingController _textField2Controller = TextEditingController();
-  TextEditingController _textField3Controller = TextEditingController();
+  final TextEditingController _textField1Controller = TextEditingController();
+  final TextEditingController _textField2Controller = TextEditingController();
+  final TextEditingController _textField3Controller = TextEditingController();
 
   @override
   void dispose() {
@@ -33,7 +34,8 @@ class _ContactPageState extends State<ContactPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/');
+              Navigator.of(context).pop();
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WeatherPage()));
             },
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_iffic/Pages/weather_screen.dart';
 
 import '../global_variables.dart';
 
@@ -17,7 +18,8 @@ class TeamPage extends StatelessWidget {
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/');
+                Navigator.of(context).pop();
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const WeatherPage()));
               },
             ),
           ),

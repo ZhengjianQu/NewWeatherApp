@@ -59,10 +59,8 @@ class _WeatherPageState extends State<WeatherPage> {
     try {
       final position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
-
       );
-      latitude= position.latitude;
-      longitude = position.longitude;
+      setPosition(position.latitude,position.longitude);
     } catch (e) {
       setState(() {
         _errorMessage = 'Failed to get current location';
@@ -75,8 +73,7 @@ class _WeatherPageState extends State<WeatherPage> {
       List<Location> locations = await locationFromAddress(cityName);
       if (locations.isNotEmpty) {
         Location firstLocation = locations.first;
-        latitude = firstLocation.latitude;
-        longitude = firstLocation.longitude;
+        setPosition(firstLocation.latitude,firstLocation.longitude);
       } else {
         setState(() {
           _errorMessage = 'Failed to get city coordinates';
@@ -137,6 +134,7 @@ class _WeatherPageState extends State<WeatherPage> {
     _getCurrentLocation();
     _fetchWeatherData();
     forecastData = fetchForecastData();
+    modifiable = false;
   }
 
   @override
@@ -165,9 +163,12 @@ class _WeatherPageState extends State<WeatherPage> {
                 decoration: InputDecoration(
                   prefixIcon: IconButton(
                     onPressed: () {
-                      setState(() {
-                        location = "current";
-                        _onClear();
+                      setState(() async {
+                        modifiable = true;
+                        await _getCurrentLocation();
+                        modifiable = false;
+                        _fetchWeatherData();
+                        forecastData = fetchForecastData();
                       });
                     },
                     icon: const Icon(
@@ -185,11 +186,13 @@ class _WeatherPageState extends State<WeatherPage> {
                   suffixIcon: _showClearButton ? null : const Icon(Icons.search),
                   suffixIconColor: Colors.grey,
                 ),
-                onSubmitted: (String value){
-                  setState(() {
-                    _getCityCoordinates(_searchController.text);
+                onSubmitted: (String value) async {
+                  setState(() async {
+                    modifiable = true;
+                    await _getCityCoordinates(_searchController.text);
+                    modifiable = false;
                     _fetchWeatherData();
-
+                    forecastData = fetchForecastData();
                   });
                 },
               ),
@@ -215,10 +218,8 @@ class _WeatherPageState extends State<WeatherPage> {
                 isCelsius = !isCelsius; // 切换摄氏度和华氏度
                 if (isCelsius) {
                   unitSymbol = "°C";
-
                 } else {
                   unitSymbol = "°F";
-
                 }
               });
             },
@@ -256,6 +257,7 @@ class _WeatherPageState extends State<WeatherPage> {
       ),
     );
   }
+
   Widget _buildWeatherPage(weatherData){
     if (weatherData == null && previousWeatherData != null) {
       return _buildDataPage(previousWeatherData); // 使用上一次的数据加载页面
@@ -527,8 +529,3 @@ class _WeatherPageState extends State<WeatherPage> {
     );
   }
 }
-
-
-
-
-
