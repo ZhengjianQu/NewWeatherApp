@@ -39,18 +39,32 @@ class TechnologiesPage extends StatelessWidget {
                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
+                              children: const [
+                                Icon(
                                   Icons.extension,
                                   color: Colors.white70,
                                   size: 30,
                                 ),
-                                const SizedBox(width: 10),
-                                createText('Technologies', 24, color: Colors.white70)
+                                SizedBox(width: 10),
+                                Text(
+                                  'Technologies',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white70,
+                                  ),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 40),
-                            createText(technologiesText, 16, color: Colors.white70)
+                            const Text(
+                              'A weather app developed using Android Studio that fetches data from the OpenWeather API.',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white70,
+                              ),
+                            ),
                           ]),
                     ))),
           ),

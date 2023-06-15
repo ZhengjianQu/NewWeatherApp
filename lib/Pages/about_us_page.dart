@@ -41,20 +41,34 @@ class AboutUsPage extends StatelessWidget {
                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
+                              children: const [
+                                Icon(
                                   Icons.info,
                                   color: Colors.white70,
                                   size: 30,
                                 ),
-                                const SizedBox(width: 10),
-                                createText('About Us', 24, color: Colors.white70)
+                                SizedBox(width: 10),
+                                Text(
+                                  'About Us',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white70,
+                                  ),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 40),
-                            Expanded(
+                            const Expanded(
                               child: SingleChildScrollView(
-                                child: createText(aboutUsText, 16, color: Colors.white70)
+                                  child: Text(
+                                    'Welcome to our team at Tempo . We are a dedicated team of Developers and Designers that aim to bring the best user experience to customers like you so that you can access accurate and real-time information right at your fingertips. We started off as a group of University students that eventually took our passion for technology and established our company. Now , we are a small but talented team of 11 creative minds , and with a deep understanding of meteorology and cutting-edge technology, we continue to deliver a seamless user experience and constantly work on your feedback to continuously improve our app performance and your happiness. Our team\'s expertise lies in designing and maintaining functional and user friendly interface and accurate real time data analysis . Weather and Weather forecasts are among the few factors that impact our daily lives, so it is important that this data is accessible in the utmost accurate and comprehensible format , so that you can make informed decisions about your day. We hope that we at Tempo can provide you with the best user experience.',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white70,
+                                    ),
+                                  ),
                               ),
                             ),
                             //createText(aboutUsText, 16, color: Colors.white70)

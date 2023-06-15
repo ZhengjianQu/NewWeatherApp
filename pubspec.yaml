@@ -67,24 +67,7 @@ flutter:
     - assets/images/Backgrounds/Thunderstorm.png
     - assets/images/Backgrounds/Atmosphere.png
 
-    - assets/images/Icons/01d.png
-    - assets/images/Icons/01n.png
-    - assets/images/Icons/02d.png
-    - assets/images/Icons/02n.png
-    - assets/images/Icons/03d.png
-    - assets/images/Icons/03n.png
-    - assets/images/Icons/04d.png
-    - assets/images/Icons/04n.png
-    - assets/images/Icons/09d.png
-    - assets/images/Icons/09n.png
-    - assets/images/Icons/10d.png
-    - assets/images/Icons/10n.png
-    - assets/images/Icons/11d.png
-    - assets/images/Icons/11n.png
-    - assets/images/Icons/13d.png
-    - assets/images/Icons/13n.png
-    - assets/images/Icons/50d.png
-    - assets/images/Icons/50n.png
+    - assets/images/Icons/Compass.png
 
     - assets/images/Photos/Name.jpg
     - assets/images/Photos/Zhengjian Qu.jpg

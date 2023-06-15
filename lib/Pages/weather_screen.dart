@@ -1,10 +1,10 @@
 // Package
 import 'dart:convert';
-import 'package:dotted_border/dotted_border.dart'; // 风向的虚线圈
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
+import 'dart:math' as math;
 // File
 import '../DataStructure/forecast_model.dart';
 import '../DataStructure/weather_model.dart';
@@ -132,9 +132,7 @@ class _WeatherPageState extends State<WeatherPage> {
   void initState() {
     super.initState();
     _getCurrentLocation().then((_) {
-      setState(() {
-        modifiable = false;
-      });
+      modifiable = false;
       _fetchWeatherData();
       _forecastData = fetchForecastData();
     });
@@ -172,8 +170,8 @@ class _WeatherPageState extends State<WeatherPage> {
                       setState(() {
                         modifiable = true;
                         _getCurrentLocation().then((_) {
+                          modifiable = false;
                           setState(() {
-                            modifiable = false;
                             _fetchWeatherData();
                             _forecastData = fetchForecastData();
                           });
@@ -199,8 +197,8 @@ class _WeatherPageState extends State<WeatherPage> {
                   setState(() {
                     modifiable = true;
                     _getCityCoordinates(_searchController.text).then((_) {
+                      modifiable = false;
                       setState(() {
-                        modifiable = false;
                         _fetchWeatherData();
                         _forecastData = fetchForecastData();
                       });
@@ -298,13 +296,27 @@ class _WeatherPageState extends State<WeatherPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: createText(weatherData!.name, 64),
+                    child: Text(
+                      weatherData!.name,
+                      style: const TextStyle(
+                        fontSize: 64,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 );
               },
             ),
             const SizedBox(height: 8),
-            createText('${temperature(weatherData!.temperature)}$unitSymbol', 64),
+            Text(
+              '${temperature(weatherData!.temperature)}$unitSymbol',
+              style: const TextStyle(
+                fontSize: 64,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
             const SizedBox(height: 8),
             Center(
               child: Row(
@@ -316,7 +328,14 @@ class _WeatherPageState extends State<WeatherPage> {
                     height: 90,
                   ),
                   const SizedBox(width: 16),
-                  createText(weatherData!.main, 28),
+                  Text(
+                    weatherData!.main,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -338,14 +357,35 @@ class _WeatherPageState extends State<WeatherPage> {
                           borderRadius:
                           BorderRadius.circular(10),
                         ),
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
                           children: [
-                            createText('Feels like', 14, color: Colors.white60),
-                            createText('${temperature(weatherData!.feelsLike)}$unitSymbol', 28),
-                            createText('Similar to the actual temperature', 12, color: Colors.white60),
+                            const Text(
+                              'Feels like',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            Text(
+                              '${temperature(weatherData!.feelsLike)}$unitSymbol',
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Text(
+                              'Similar to the actual temperature',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white60,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -362,16 +402,37 @@ class _WeatherPageState extends State<WeatherPage> {
                           borderRadius:
                           BorderRadius.circular(10),
                         ),
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
                           children: [
-                            createText('Humidity', 14, color: Colors.white60),
-                            createText(weatherData!.humidity.toString(), 24),
-                            createText('The dew point is '
-                                '${(weatherData!.temperature - ((100 - weatherData!.humidity) / 5)).toStringAsFixed(1)} '
-                                'right now.', 13, color: Colors.white60),
+                            const Text(
+                              'Humidity',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            Text(
+                              weatherData!.humidity.toString(),
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Text(
+                              'The dew point is '
+                              '${(weatherData!.temperature - ((100 - weatherData!.humidity) / 5)).toStringAsFixed(1)} '
+                              'right now.',
+                              style: const TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white60,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -396,14 +457,35 @@ class _WeatherPageState extends State<WeatherPage> {
                           borderRadius:
                           BorderRadius.circular(10),
                         ),
-                        padding: const EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment:
                           CrossAxisAlignment.start,
                           children: [
-                            createText('Visibility', 14, color: Colors.white60),
-                            createText('${weatherData!.visibility} m', 24, color: Colors.white),
-                            createText('Max 10km.', 17, color: Colors.white60),
+                            const Text(
+                              'Visibility',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white60,
+                              ),
+                            ),
+                            Text(
+                              '${weatherData!.visibility}m',
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const Text(
+                              'Max 10km',
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white60,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -420,32 +502,51 @@ class _WeatherPageState extends State<WeatherPage> {
                             borderRadius:
                             BorderRadius.circular(10),
                           ),
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(10),
                           child: Column(
                               crossAxisAlignment:
                               CrossAxisAlignment.start,
                               children: [
-                                createText('Wind', 14, color: Colors.white60),
+                                const Text(
+                                  'Wind',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white60,
+                                  ),
+                                ),
                                 Stack(
+                                  alignment: Alignment.center,
                                   children: [
-                                    DottedBorder(
-                                      borderType: BorderType.Circle,
-                                      strokeWidth: 6,
-                                      color: const Color.fromRGBO(255, 255, 255, 0.2),
-                                      child: Container(
-                                        width: 36,
-                                        height: 36,
-                                        margin: const EdgeInsets.all(20),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: SizedBox(
+                                        width: 80,
+                                        height: 80,
+                                        child: Center(
+                                          child: Transform.rotate(
+                                            angle: math.pi / 180 * weatherData!.windDeg,
+                                            alignment: Alignment.center,
+                                            child: ColorFiltered(
+                                              colorFilter: const ColorFilter.mode(Colors.white60, BlendMode.srcIn),
+                                              child: Image.asset(
+                                                'assets/images/Icons/Compass.png', // 替换为你的图片路径
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     Positioned.fill(
                                       child: Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            createText((weatherData!.windSpeed * 3.6).toStringAsFixed(2), 16),
-                                            createText('km/h', 14, color: Colors.white),
-                                          ],
+                                        child: Text(
+                                          (weatherData!.windSpeed * 3.6).toStringAsFixed(2) + '\nkm/h',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -577,7 +678,6 @@ class _WeatherPageState extends State<WeatherPage> {
               ),
             ),
         ),
-
     );
   }
 }

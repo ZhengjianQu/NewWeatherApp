@@ -60,14 +60,21 @@ class _ContactPageState extends State<ContactPage> {
                     const SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
+                      children: const [
+                        Icon(
                           Icons.contact_support,
                           color: Colors.white70,
                           size: 30,
                         ),
-                        const SizedBox(width: 10),
-                        createText('Contact', 24, color: Colors.white70),
+                        SizedBox(width: 10),
+                        Text(
+                          'Contact',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white70,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 30),
@@ -84,11 +91,24 @@ class _ContactPageState extends State<ContactPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
                       ),
-                      child: 
-                      createText('Contact Us', 16, color: Colors.white70)
+                      child: const Text(
+                        'Contact Us',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 10),
-                    createText('If you have any questions or problems, please feel free to contact us.', 12, color: Colors.white70),
+                    const Text(
+                      'If you have any questions or problems, please feel free to contact us.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     Container(
                       margin: const EdgeInsets.all(5),

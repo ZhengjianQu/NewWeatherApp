@@ -43,15 +43,21 @@ class TeamPage extends StatelessWidget {
                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Icon(
+                              children: const [
+                                Icon(
                                   Icons.info,
                                   color: Colors.white70,
                                   size: 30,
                                 ),
-                                const SizedBox(width: 10),
-                                createText('About Us', 24, color: Colors.white70)
-
+                                SizedBox(width: 10),
+                                Text(
+                                  'About Us',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white70,
+                                  ),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 20),
@@ -111,14 +117,35 @@ Widget createBusinessCard(String name, String role, String email) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  createText(name, 18, color: Colors.white70),
-                  createText(role, 18, color: Colors.white70),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                    ),
+                  ),
+                  Text(
+                    role,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white70,
+                    ),
+                  ),
                 ],
               ),
             ),
           ],
         ),
-        createText(email, 16, color: Colors.white70),
+        Text(
+          email,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.white70,
+          ),
+        ),
         const SizedBox(height: 5),
       ],
     ),

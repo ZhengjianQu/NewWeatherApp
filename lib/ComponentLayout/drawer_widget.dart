@@ -27,10 +27,58 @@ class DrawerWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 60),
               children: [
                 const SizedBox(height: 150),
-                createListTile('About Us', Icons.info, '/about_us', context),
-                createListTile('Team', Icons.group, '/team', context),
-                createListTile('Technologies', Icons.extension, '/technologies_page', context),
-                createListTile('Contact', Icons.contact_support, '/contact_page', context),
+                ListTile(
+                  title:
+                  const Text(
+                    'About Us',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                  leading: const Icon(Icons.info, color: Colors.white60),
+                  onTap: () {
+                    modifiable = false;
+                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, '/about_us');
+                  },
+                ),
+                ListTile(
+                  title:
+                  const Text(
+                    'Team',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                  leading: const Icon(Icons.group, color: Colors.white60),
+                  onTap: () {
+                    modifiable = false;
+                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, '/team');
+                  },
+                ),
+                ListTile(
+                  title:
+                  const Text(
+                    'Technologies',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                  leading: const Icon(Icons.extension, color: Colors.white60),
+                  onTap: () {
+                    modifiable = false;
+                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, '/technologies_page');
+                  },
+                ),
+                ListTile(
+                  title:
+                  const Text(
+                    'Contact',
+                    style: TextStyle(color: Colors.white60),
+                  ),
+                  leading: const Icon(Icons.contact_support, color: Colors.white60),
+                  onTap: () {
+                    modifiable = false;
+                    Navigator.of(context).pop();
+                    Navigator.pushNamed(context, '/contact_page');
+                  },
+                ),
               ],
             ),
           ),
@@ -38,21 +86,4 @@ class DrawerWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget createListTile(String text, IconData icon, String path, BuildContext context) {
-  return ListTile(
-    title:
-
-    Text(
-      text,
-      style: TextStyle(color: Colors.white.withOpacity(0.5)),
-    ),
-    leading: Icon(icon, color: Colors.white.withOpacity(0.5)),
-    onTap: () {
-      modifiable = false;
-      Navigator.of(context).pop();
-      Navigator.pushNamed(context, path);
-    },
-  );
 }
