@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'Pages/about_us_page.dart';
 import 'Pages/contact_page.dart';
 import 'Pages/team_screen.dart';
 import 'Pages/technologies_page.dart';
 import 'Pages/weather_screen.dart';
 
-void main() => runApp(const MyApp());
+void main(){
+  // Set the system's navigation bar color to black
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.black,
+    ),
+  );
+  runApp(const MyApp());
+}
 
 
 /// The main app.

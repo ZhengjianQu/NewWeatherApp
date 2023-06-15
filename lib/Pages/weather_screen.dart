@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math' as math;
+
 // File
 import '../DataStructure/forecast_model.dart';
 import '../DataStructure/weather_model.dart';
@@ -171,10 +172,8 @@ class _WeatherPageState extends State<WeatherPage> {
                         modifiable = true;
                         _getCurrentLocation().then((_) {
                           modifiable = false;
-                          setState(() {
-                            _fetchWeatherData();
-                            _forecastData = fetchForecastData();
-                          });
+                          _fetchWeatherData();
+                          _forecastData = fetchForecastData();
                         });
                       });
                     },
@@ -198,10 +197,8 @@ class _WeatherPageState extends State<WeatherPage> {
                     modifiable = true;
                     _getCityCoordinates(_searchController.text).then((_) {
                       modifiable = false;
-                      setState(() {
-                        _fetchWeatherData();
-                        _forecastData = fetchForecastData();
-                      });
+                      _fetchWeatherData();
+                      _forecastData = fetchForecastData();
                     });
                   });
                 },
@@ -521,8 +518,8 @@ class _WeatherPageState extends State<WeatherPage> {
                                     Align(
                                       alignment: Alignment.center,
                                       child: SizedBox(
-                                        width: 80,
-                                        height: 80,
+                                        width: 85,
+                                        height: 85,
                                         child: Center(
                                           child: Transform.rotate(
                                             angle: math.pi / 180 * weatherData!.windDeg,
@@ -540,14 +537,27 @@ class _WeatherPageState extends State<WeatherPage> {
                                     ),
                                     Positioned.fill(
                                       child: Center(
-                                        child: Text(
-                                          (weatherData!.windSpeed * 3.6).toStringAsFixed(2) + '\nkm/h',
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                          ),
-                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              (weatherData!.windSpeed * 3.6).toStringAsFixed(2),
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            const Text(
+                                              'km/h',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.white60,
+                                              ),
+                                            ),
+                                          ],
+                                        )
                                       ),
                                     ),
                                   ],
@@ -654,7 +664,7 @@ class _WeatherPageState extends State<WeatherPage> {
             } else if (snapshot.hasError) {
               return const Text('Failed to fetch forecast data');
             } else {
-              return const CircularProgressIndicator();
+              return _loadingPage();
             }
           },
         ),
