@@ -69,7 +69,7 @@ class DrawerWidget extends StatelessWidget {
                 ListTile(
                   title:
                   const Text(
-                    'Contact',
+                    'Contact Us',
                     style: TextStyle(color: Colors.white60),
                   ),
                   leading: const Icon(Icons.contact_support, color: Colors.white60),

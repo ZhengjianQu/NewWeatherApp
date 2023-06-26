@@ -41,9 +41,9 @@ class TeamPage extends StatelessWidget {
                       child: Column(
                           children: [
                             const SizedBox(height: 10),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.info,
                                   color: Colors.white70,

@@ -34,12 +34,12 @@ class TechnologiesPage extends StatelessWidget {
                         color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8)),
                     child: Container(
                       margin: const EdgeInsets.all(40),
-                      child: Column(
+                      child: const Column(
                           children: [
-                            const SizedBox(height: 10),
+                            SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.extension,
                                   color: Colors.white70,
@@ -56,8 +56,8 @@ class TechnologiesPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 40),
-                            const Text(
+                            SizedBox(height: 40),
+                            Text(
                               'A weather app developed using Android Studio that fetches data from the OpenWeather API.',
                               style: TextStyle(
                                 fontSize: 16,

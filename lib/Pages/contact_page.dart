@@ -7,10 +7,10 @@ class ContactPage extends StatefulWidget {
   const ContactPage({Key? key}) : super(key: key);
 
   @override
-  _ContactPageState createState() => _ContactPageState();
+  ContactPageState createState() => ContactPageState();
 }
 
-class _ContactPageState extends State<ContactPage> {
+class ContactPageState extends State<ContactPage> {
   final TextEditingController _textField1Controller = TextEditingController();
   final TextEditingController _textField2Controller = TextEditingController();
   final TextEditingController _textField3Controller = TextEditingController();
@@ -58,9 +58,9 @@ class _ContactPageState extends State<ContactPage> {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.contact_support,
                           color: Colors.white70,
@@ -68,7 +68,7 @@ class _ContactPageState extends State<ContactPage> {
                         ),
                         SizedBox(width: 10),
                         Text(
-                          'Contact',
+                          'Contact Us',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
