@@ -109,7 +109,6 @@ class _WeatherPageState extends State<WeatherPage> {
         'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude&lon=$longitude&appid=$apiKey&units=metric');
     final response = await http.get(url);
     if (response.statusCode == 200) {
-      // 解析 API 响应的 JSON 数据并创建 ForecastData 对象
       return ForecastData.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to fetch forecast data');
@@ -222,7 +221,7 @@ class _WeatherPageState extends State<WeatherPage> {
           TextButton(
             onPressed: () {
               setState(() {
-                isCelsius = !isCelsius; // 切换摄氏度和华氏度
+                isCelsius = !isCelsius; // Switching between °C and °F
                 if (isCelsius) {
                   unitSymbol = "°C";
                 } else {
@@ -235,7 +234,7 @@ class _WeatherPageState extends State<WeatherPage> {
               foregroundColor: MaterialStateProperty.all(Colors.white),
             ),
             child: Text(
-              isCelsius ? '°C' : '°F', // 根据当前状态显示°C或°F
+              isCelsius ? '°C' : '°F', // Display °C or °F according to current status
               style: const TextStyle(fontSize: 16),
             ),
           ),
@@ -249,17 +248,24 @@ class _WeatherPageState extends State<WeatherPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: PageView(
+        child: PageView.builder(
           controller: _pageController,
+          scrollDirection: MediaQuery.of(context).orientation == Orientation.portrait
+              ? Axis.horizontal
+              : Axis.vertical,
           onPageChanged: (index) {
             setState(() {
               _currentPageIndex = index;
             });
           },
-          children: [
-            _buildWeatherPage(_weatherData),
-            _buildForecastPage(_forecastData),
-          ],
+          itemCount: 2, // Set the number of pages
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return _buildWeatherPage(_weatherData);
+            } else{
+              return _buildForecastPage(_forecastData);
+            }
+          },
         ),
       ),
     );
@@ -267,22 +273,31 @@ class _WeatherPageState extends State<WeatherPage> {
 
   Widget _buildWeatherPage(weatherData){
     if (weatherData == null && previousWeatherData != null) {
-      return _buildDataPage(previousWeatherData); // 使用上一次的数据加载页面
+      if(MediaQuery.of(context).orientation == Orientation.portrait){
+        return _buildDataVerticalPage(previousWeatherData); // Use the previous data load page
+      }
+      else{
+        return _buildDataHorizontalPage(previousWeatherData);
+      }
     }else if(weatherData == null){
       return _loadingPage();
     }else {
-      return _buildDataPage(weatherData); // 使用当前的数据加载页面
+      if(MediaQuery.of(context).orientation == Orientation.portrait){
+        return _buildDataVerticalPage(weatherData); // Use the current data to load the page
+      }else{
+        return _buildDataHorizontalPage(weatherData);
+      }
     }
   }
 
-  Widget _buildDataPage(weatherData) {
+  Widget _buildDataVerticalPage(weatherData) {
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(
-            horizontal: 30, vertical: 30), // 设置左右和上下的间距
+            horizontal: 30, vertical: 30),
         decoration: BoxDecoration(
             borderRadius:
-            BorderRadius.circular(10), // 设置圆角半径为10
+            BorderRadius.circular(10),
             color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -576,25 +591,205 @@ class _WeatherPageState extends State<WeatherPage> {
     );
   }
 
+  Widget _buildDataHorizontalPage(weatherData) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        weatherData!.name,
+                        style: const TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        '${temperature(weatherData!.temperature)}$unitSymbol',
+                        style: const TextStyle(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.network(
+                              'https://openweathermap.org/img/wn/${weatherData!.iconUrl}@4x.png',
+                              width: 90,
+                              height: 90,
+                            ),
+                            const SizedBox(width: 2),
+                            Text(
+                              weatherData!.main,
+                              style: const TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                    ]
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Outdoor feels like ${temperature(weatherData!.feelsLike)}$unitSymbol',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Today\'s temperature is',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      '   from ${temperature(weatherData!.tempMax)}$unitSymbol to ${temperature(weatherData!.tempMin)}$unitSymbol',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Daytime is from ${weatherData!.sunrise} to ${weatherData!.sunset}',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ]
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            width: 160,
+                            height: 160,
+                            child: Center(
+                              child: Transform.rotate(
+                                angle: math.pi / 180 * weatherData!.windDeg,
+                                alignment: Alignment.center,
+                                child: ColorFiltered(
+                                  colorFilter: const ColorFilter.mode(Colors.white60, BlendMode.srcIn),
+                                  child: Image.asset(
+                                    'assets/images/Icons/Compass.png', // 替换为你的图片路径
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    (weatherData!.windSpeed * 3.6).toStringAsFixed(2),
+                                    style: const TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const Text(
+                                    'km/h',
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  } //  TODO
+
+
   Widget _buildForecastPage(forecastData){
     if (forecastData == null && previousForecastData != null) {
-      return _buildListPage(previousForecastData); // 使用上一次的数据加载页面
+      if(MediaQuery.of(context).orientation == Orientation.portrait){
+        return _buildListVerticalPage(previousForecastData); // Use the previous data load page
+      }else{
+        return _buildListHorizontalPage(previousForecastData); // Use the previous data load page
+      }
+
     }else if(forecastData == null){
       return _loadingPage();
     }else {
-      return _buildListPage(forecastData); // 使用当前的数据加载页面
+      if(MediaQuery.of(context).orientation == Orientation.portrait){
+        return _buildListVerticalPage(forecastData); // Use the previous data load page
+      }else{
+        return _buildListHorizontalPage(forecastData); // Use the previous data load page
+      }
     }
   }
 
-  Widget _buildListPage(forecastData){
+  Widget _buildListVerticalPage(forecastData){
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(
             horizontal: 30, vertical: 30
-        ), // 设置左右和上下的间距
+        ),
         decoration: BoxDecoration(
             borderRadius:
-            BorderRadius.circular(20), // 设置圆角半径为10
+            BorderRadius.circular(20),
             color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8)
         ),
         child: FutureBuilder<ForecastData>(
@@ -648,7 +843,7 @@ class _WeatherPageState extends State<WeatherPage> {
                         Expanded(
                           flex: 3,
                           child: Transform.scale(
-                            scale: 1.5, // 设置所需的缩放比例
+                            scale: 1.5, // Set the desired zoom ratio
                             child: Image.network(
                               'https://openweathermap.org/img/wn/${weatherInfo.iconUrl}@4x.png',
                               width: 100,
@@ -672,14 +867,93 @@ class _WeatherPageState extends State<WeatherPage> {
     );
   }
 
+  Widget _buildListHorizontalPage(forecastData){
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.symmetric(
+            horizontal: 10, vertical: 10
+        ),
+        decoration: BoxDecoration(
+            borderRadius:
+            BorderRadius.circular(20),
+            color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8)
+        ),
+        child: FutureBuilder<ForecastData>(
+          future: forecastData,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              final forecastData = snapshot.data!;
+              final forecastList = forecastData.forecastList;
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: forecastList.length,
+                itemBuilder: (context, index) {
+                  final weatherInfo = forecastList[index];
+                  return Container(
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius:BorderRadius.circular(50),
+                      color: const Color.fromRGBO(
+                          0x48, 0x31, 0x9D, 0.2),
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            weatherInfo.date,
+                            style: const TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Text(
+                            weatherInfo.time,
+                            style: const TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Transform.scale(
+                            scale: 1.5, // Set the desired zoom ratio
+                            child: Image.network(
+                              'https://openweathermap.org/img/wn/${weatherInfo.iconUrl}@4x.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                          ),
+                          Text(
+                            '${temperature(weatherInfo.temperature)}$unitSymbol',
+                            style: const TextStyle(
+                                fontSize: 48, fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else if (snapshot.hasError) {
+              return const Text('Failed to fetch forecast data');
+            } else {
+              return _loadingPage();
+            }
+          },
+        ),
+      ),
+    );
+  }
+
   Widget _loadingPage(){
     return Center(
         child: Container(
             margin: const EdgeInsets.symmetric(
-              horizontal: 30, vertical: 30), // 设置左右和上下的间距
+              horizontal: 30, vertical: 30),
             decoration: BoxDecoration(
               borderRadius:
-              BorderRadius.circular(10), // 设置圆角半径为10
+              BorderRadius.circular(10),
               color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
             ),
             child: const Center(

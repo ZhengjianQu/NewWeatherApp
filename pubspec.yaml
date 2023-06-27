@@ -57,6 +57,12 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+    - family: Agdasima
+      fonts:
+        - asset: assets/fonts/Agdasima/Agdasima-Regular.ttf
+        - asset: assets/fonts/Agdasima/Agdasima-Bold.ttf
+          weight: 700
   assets:
     - assets/images/Backgrounds/Clear.png
     - assets/images/Backgrounds/Clouds.png

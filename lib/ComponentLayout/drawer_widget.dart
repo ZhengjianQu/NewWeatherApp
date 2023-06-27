@@ -31,7 +31,7 @@ class DrawerWidget extends StatelessWidget {
                   title:
                   const Text(
                     'About Us',
-                    style: TextStyle(color: Colors.white60),
+                    style: TextStyle(fontSize: 20,color: Colors.white60),
                   ),
                   leading: const Icon(Icons.info, color: Colors.white60),
                   onTap: () {
@@ -44,7 +44,7 @@ class DrawerWidget extends StatelessWidget {
                   title:
                   const Text(
                     'Team',
-                    style: TextStyle(color: Colors.white60),
+                    style: TextStyle(fontSize: 20,color: Colors.white60),
                   ),
                   leading: const Icon(Icons.group, color: Colors.white60),
                   onTap: () {
@@ -57,7 +57,7 @@ class DrawerWidget extends StatelessWidget {
                   title:
                   const Text(
                     'Technologies',
-                    style: TextStyle(color: Colors.white60),
+                    style: TextStyle(fontSize: 20,color: Colors.white60),
                   ),
                   leading: const Icon(Icons.extension, color: Colors.white60),
                   onTap: () {
@@ -70,7 +70,7 @@ class DrawerWidget extends StatelessWidget {
                   title:
                   const Text(
                     'Contact Us',
-                    style: TextStyle(color: Colors.white60),
+                    style: TextStyle(fontSize: 20,color: Colors.white60),
                   ),
                   leading: const Icon(Icons.contact_support, color: Colors.white60),
                   onTap: () {
