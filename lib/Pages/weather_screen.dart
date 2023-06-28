@@ -302,23 +302,13 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      weatherData!.name,
-                      style: const TextStyle(
-                        fontSize: 64,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                );
-              },
+            Text(
+              weatherData!.name,
+              style: const TextStyle(
+                fontSize: 64,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -508,77 +498,81 @@ class _WeatherPageState extends State<WeatherPage> {
                     child: AspectRatio(
                       aspectRatio: 1.0,
                       child: Container(
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(
-                                0x48, 0x31, 0x9D, 0.2),
-                            borderRadius:
-                            BorderRadius.circular(10),
-                          ),
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Wind',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white60,
-                                  ),
+                        decoration: BoxDecoration(
+                          color: const Color.fromRGBO(0x48, 0x31, 0x9D, 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Align(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'Wind',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white60,
                                 ),
-                                Stack(
+                              ),
+                            ),
+                            Stack(
+                              alignment: Alignment.topLeft,
+                              children: [
+                                Align(
                                   alignment: Alignment.center,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: SizedBox(
-                                        width: 85,
-                                        height: 85,
-                                        child: Center(
-                                          child: Transform.rotate(
-                                            angle: math.pi / 180 * weatherData!.windDeg,
-                                            alignment: Alignment.center,
-                                            child: ColorFiltered(
-                                              colorFilter: const ColorFilter.mode(Colors.white60, BlendMode.srcIn),
-                                              child: Image.asset(
-                                                'assets/images/Icons/Compass.png', // 替换为你的图片路径
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
+                                  child: SizedBox(
+                                    width: 90,
+                                    height: 90,
+                                    child: Center(
+                                      child: Transform.rotate(
+                                        angle: math.pi / 180 * weatherData!.windDeg,
+                                        alignment: Alignment.center,
+                                        child: ColorFiltered(
+                                          colorFilter: const ColorFilter.mode(
+                                            Colors.white60,
+                                            BlendMode.srcIn,
+                                          ),
+                                          child: Image.asset(
+                                            'assets/images/Icons/Compass.png',
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
                                     ),
-                                    Positioned.fill(
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              (weatherData!.windSpeed * 3.6).toStringAsFixed(2),
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                            const Text(
-                                              'km/h',
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.white60,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      ),
+                                  ),
+                                ),
+                                Positioned.fill(
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          (weatherData!.windSpeed * 3.6).toStringAsFixed(2),
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        const Text(
+                                          'km/h',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white60,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                )
-                              ]
-                          )
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -595,6 +589,7 @@ class _WeatherPageState extends State<WeatherPage> {
     return Center(
       child: Container(
         margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
@@ -602,7 +597,6 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Row(
           children: [
             Expanded(
-              flex: 1,
               child: Center(
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -652,106 +646,230 @@ class _WeatherPageState extends State<WeatherPage> {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
             Expanded(
-              flex: 1,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: Row(
                   children: [
-                    Text(
-                      'Outdoor feels like ${temperature(weatherData!.feelsLike)}$unitSymbol',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    const Text(
-                      'Today\'s temperature is',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      '   from ${temperature(weatherData!.tempMax)}$unitSymbol to ${temperature(weatherData!.tempMin)}$unitSymbol',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'Daytime is from ${weatherData!.sunrise} to ${weatherData!.sunset}',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ]
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: AspectRatio(
-                aspectRatio: 1.0,
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            width: 160,
-                            height: 160,
-                            child: Center(
-                              child: Transform.rotate(
-                                angle: math.pi / 180 * weatherData!.windDeg,
-                                alignment: Alignment.center,
-                                child: ColorFiltered(
-                                  colorFilter: const ColorFilter.mode(Colors.white60, BlendMode.srcIn),
-                                  child: Image.asset(
-                                    'assets/images/Icons/Compass.png', // 替换为你的图片路径
-                                    fit: BoxFit.contain,
-                                  ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child:Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(
+                                    0x48, 0x31, 0x9D, 0.2
                                 ),
+                                borderRadius:
+                                BorderRadius.circular(10),
                               ),
-                            ),
-                          ),
-                        ),
-                        Positioned.fill(
-                          child: Center(
+                              padding: const EdgeInsets.all(10),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
                                 children: [
+                                  const Text(
+                                    'Feels like',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white60,
+                                    ),
+                                  ),
                                   Text(
-                                    (weatherData!.windSpeed * 3.6).toStringAsFixed(2),
+                                    '${temperature(weatherData!.feelsLike)}$unitSymbol',
                                     style: const TextStyle(
-                                      fontSize: 36,
+                                      fontSize: 28,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
                                   ),
                                   const Text(
-                                    'km/h',
+                                    'Similar to the actual temperature',
                                     style: TextStyle(
-                                      fontSize: 24,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white60,
                                     ),
                                   ),
                                 ],
-                              )
+                              ),
+                            ),
                           ),
+                          const SizedBox(height: 10),
+                          Expanded(
+                            child:Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(
+                                    0x48, 0x31, 0x9D, 0.2),
+                                borderRadius:
+                                BorderRadius.circular(10),
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.start,
+                                children: [
+                                  const Text(
+                                    'Humidity',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                  Text(
+                                    weatherData!.humidity.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    'The dew point is '
+                                        '${(weatherData!.temperature - ((100 - weatherData!.humidity) / 5)).toStringAsFixed(1)} '
+                                        'right now.',
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white60,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                        child:Column(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.centerLeft,
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(0x48, 0x31, 0x9D, 0.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'Visibility',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white60,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${weatherData!.visibility}m',
+                                      style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'Max 10km',
+                                      style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white60,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Expanded(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(0x48, 0x31, 0x9D, 0.2),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.topLeft,
+                                      children: [
+                                        const Align(
+                                          alignment: Alignment.topLeft,
+                                          child: Text(
+                                            'Wind',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white60,
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: SizedBox(
+                                            width: 85,
+                                            height: 85,
+                                            child: Center(
+                                              child: Transform.rotate(
+                                                angle: math.pi / 180 * weatherData!.windDeg,
+                                                alignment: Alignment.center,
+                                                child: ColorFiltered(
+                                                  colorFilter: const ColorFilter.mode(
+                                                    Colors.white60,
+                                                    BlendMode.srcIn,
+                                                  ),
+                                                  child: Image.asset(
+                                                    'assets/images/Icons/Compass.png',
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Positioned.fill(
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  (weatherData!.windSpeed * 3.6).toStringAsFixed(2),
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                                const Text(
+                                                  'km/h',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.white60,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    )
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -759,7 +877,7 @@ class _WeatherPageState extends State<WeatherPage> {
         ),
       ),
     );
-  } //  TODO
+  }
 
 
   Widget _buildForecastPage(forecastData){
