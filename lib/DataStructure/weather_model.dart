@@ -24,9 +24,9 @@ class WeatherData {
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
       temperature: json['main']['temp'].toDouble(),
-      feelsLike: json['main']['feels_like'],
+      feelsLike: json['main']['feels_like'].toDouble(),
       humidity: json['main']['humidity'],
-      windSpeed: json['wind']['speed'],
+      windSpeed: json['wind']['speed'].toDouble(),
       windDeg: json['wind']['deg'],
       visibility: json['visibility'],
       main: json['weather'][0]['main'],

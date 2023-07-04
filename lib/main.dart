@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Pages/about_us_page.dart';
+import 'Pages/apikey_verification_page.dart';
 import 'Pages/contact_page.dart';
 import 'Pages/team_screen.dart';
 import 'Pages/technologies_page.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/about_us':(context) => const AboutUsPage(),
         '/technologies_page':(context) => const TechnologiesPage(),
         '/contact_page':(context) => const ContactPage(),
+        '/api_page':(context) => const ApiKeyVerificationPage(),
       },
     );
   }
