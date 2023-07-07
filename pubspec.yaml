@@ -33,6 +33,7 @@ dependencies:
   geocoding: ^2.1.0
   intl: ^0.17.0
   shared_preferences: ^2.0.6
+  webview_flutter: ^2.0.8
   flutter:
     sdk: flutter
 

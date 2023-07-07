@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../ComponentLayout/web_view.dart';
 import '../global_variables.dart';
 
 class ApiKeyVerificationPage extends StatefulWidget {
@@ -102,70 +103,83 @@ class ApiKeyVerificationPageState extends State<ApiKeyVerificationPage> {
             child: Container(
               margin: const EdgeInsets.all(30),
               padding: const EdgeInsets.all(10),
-              child: Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Flexible(
-                      flex: 3,
-                        child: TextField(
-                          controller: _apiKeyController,
-                          maxLines: isPortrait? 2:1,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            labelText: 'API Key',
-                            labelStyle: const TextStyle(color: Colors.white70),
-                            fillColor: Colors.black87,
-                            filled: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  TextField(
+                    controller: _apiKeyController,
+                    maxLines: isPortrait? 2:1,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      labelText: 'API Key',
+                      labelStyle: const TextStyle(color: Colors.white70),
+                      fillColor: Colors.black87,
+                      filled: true,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
-                    Flexible(
-                        flex: 2,
-                        child:ElevatedButton(
-                          onPressed: _verifyApiKey,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                          ),
-                          child: const Text(
-                            'Verify',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white70,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Expanded(child: SizedBox()),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WebViewPage(url: 'https://openweathermap.org/api'),
                             ),
-                          ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
                         ),
-                    ),
-                    Flexible(
-                        flex: 1,
-                        child:Text(
-                          _verificationResult,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                          ),
-                        ),
-                    ),
-                    const Flexible(
-                        flex: 1,
-                        child:Text(
-                          'Enter your API Key and click "Verify" to check if it is valid. If the API Key is valid, it will be saved locally as userApiKey.',
+                        child: const Text(
+                          'Get your own API',
                           style: TextStyle(
                             fontSize: 16,
                             color: Colors.white70,
                           ),
                         ),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: _verifyApiKey,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                        ),
+                        child: const Text(
+                          'Verify',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    _verificationResult,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
                     ),
-                  ],
-                ),
+                  ),
+                  const Text(
+                    'Enter your API Key and click "Verify" to check if it is valid. If the API Key is valid, it will be saved locally as userApiKey.',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

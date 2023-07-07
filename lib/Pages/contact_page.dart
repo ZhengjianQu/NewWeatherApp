@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../ComponentLayout/web_view.dart';
 import '../global_variables.dart';
 
 class ContactPage extends StatefulWidget {
@@ -121,7 +121,12 @@ class ContactPageState extends State<ContactPage> {
                           children: [
                             ElevatedButton(
                               onPressed: () {
-                                // TODO: Contact Function
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const WebViewPage(url: 'https://www.google.com/'),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
