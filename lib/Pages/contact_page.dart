@@ -124,7 +124,7 @@ class ContactPageState extends State<ContactPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const WebViewPage(url: 'https://www.google.com/'),
+                                    builder: (context) => const WebViewPage(url: 'http://10.0.2.2:4200/'),
                                   ),
                                 );
                               },

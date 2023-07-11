@@ -53,6 +53,7 @@ class ApiKeyVerificationPageState extends State<ApiKeyVerificationPage> {
     final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           backgroundColor: Colors.black,
           toolbarHeight: 50,
