@@ -24,7 +24,8 @@ class ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
 
     return MaterialApp(
       home: Scaffold(
@@ -42,24 +43,24 @@ class ContactPageState extends State<ContactPage> {
           title: isPortrait
               ? null
               : const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.contact_support,
-                    color: Colors.white70,
-                    size: 30,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    'Contact Us',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.contact_support,
                       color: Colors.white70,
+                      size: 30,
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(width: 10),
+                    Text(
+                      'Contact Us',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -77,11 +78,12 @@ class ContactPageState extends State<ContactPage> {
               ),
               child: Container(
                 margin: const EdgeInsets.all(20),
-                child: Flex(
-                  direction: isPortrait ? Axis.vertical : Axis.horizontal,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     if (isPortrait) ...[
-                        const Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
@@ -102,66 +104,86 @@ class ContactPageState extends State<ContactPage> {
                       ),
                       const SizedBox(height: 30),
                     ],
-                    Expanded(
-                      child: Column(
-                        children: [
-                          buildInputField('Name', _textField1Controller),
-                          const SizedBox(height: 10),
-                          buildInputField('Email', _textField2Controller),
-                          const SizedBox(height: 10),
-                          buildInputField('Message', _textField3Controller),
-                        ],
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WebViewPage(
+                                url:
+                                    'https://github.com/ZhengjianQu/NewWeatherApp'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
+                      ),
+                      child: const Text(
+                        'App Github',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                        ),
                       ),
                     ),
-
-                    Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const WebViewPage(url: 'http://10.0.2.2:4200/'),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
-                              ),
-                              child: const Text(
-                                'Contact',
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Container(
-                              margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
-                              ),
-                              child: Container(
-                                margin: const EdgeInsets.all(10),
-                                child: const Text(
-                                  'If you have any questions, please feel free to contact us.',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white70,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WebViewPage(
+                                url:
+                                    'https://github.com/ramosjr18/weather-app'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
+                      ),
+                      child: const Text(
+                        'Web Github',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
                         ),
-                    )
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                const WebViewPage(url: 'http://10.0.2.2:4200/'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromRGBO(0x0, 0x0, 0x0, 0.8),
+                      ),
+                      child: const Text(
+                        'Contact',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    const Text(
+                      'If you have any questions, please feel free to contact us.',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white70,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -172,7 +194,8 @@ class ContactPageState extends State<ContactPage> {
     );
   }
 
-  Widget buildInputField(String label, TextEditingController controller, {int maxLines = 1}) {
+  Widget buildInputField(String label, TextEditingController controller,
+      {int maxLines = 1}) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
