@@ -158,7 +158,7 @@ class ContactPageState extends State<ContactPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                const WebViewPage(url: 'http://10.0.2.2:4200/'),
+                                const WebViewPage(url: 'http://10.0.2.2:4200/contact-page'),
                           ),
                         );
                       },
